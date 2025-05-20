@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web1:
+    build:
+      context: ./web1
+    container_name: web1
+    networks:
+      - nginx-net
+
+  web2:
+    build:
+      context: ./web2
+    container_name: web2
+    networks:
+      - nginx-net
+
+  nginx-balancer:
+    build:
+      context: ./nginx
+    container_name: nginx-balancer
+    ports:
+      - "8080:80"
+    depends_on:
+      - web1
+      - web2
+    networks:
+      - nginx-net
+
+networks:
+  nginx-net:
+    driver: bridge
